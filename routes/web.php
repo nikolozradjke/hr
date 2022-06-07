@@ -15,11 +15,22 @@ use App\Http\Controllers\Dashboard\IndexController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('login');
 });
 
 Auth::routes();
 
-Route::get('/dashboard', [IndexController::class, 'index'])->name('dashboard');
+    Route::group([
+            'middleware' => 'auth',
+            'prefix' => 'dashboard'
+        ], function () {
+        Route::prefix('candidates')->group(function () { 
+            Route::get('/', [IndexController::class, 'index'])->name('dashboard');
+            Route::get('/add', [IndexController::class, 'create'])->name('createDashboard');
+            Route::post('/store', [IndexController::class, 'store'])->name('storeDashboard');
+            Route::get('/edit/{id}', [IndexController::class, 'edit'])->name('editDashboard');
+            Route::post('/update/{id}', [IndexController::class, 'update'])->name('updateDashboard');
+        });
+    });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -17,14 +17,83 @@ class Candidates extends Model
         'skills',
         'linkedin',
         'cv',
-        'status'
+        'status',
+        'experience',
+        'source',
+        'current_work_place',
+        'education',
+        'facebook',
+        'phone',
+        'email'
     ];
 
-    public function status(){
+    public function getStatus(){
         return $this->belongsTo(Statuses::class, 'status', 'id');
     }
 
     public function timelines(){
         return $this->hasMany(Timelnes::class, 'candidate_id', 'id');
+    }
+
+    public static function store($request){
+        $request_keys = $request->except(['_token','cv','skills']);
+        $item = new Candidates;
+
+        foreach($request_keys as $key => $value){
+            $item->$key = $value;
+        }
+
+        if ($request->hasFile('cv')) 
+        {
+            $destination = 'uploads/candidates';
+            $extension = $request->file('cv')->getClientOriginalExtension();
+            $fileName = mt_rand(11111, 99999) . time() . '.' . $extension;
+            $file_src = '/uploads/candidates/' . $fileName;
+            $request->file('cv')->move($destination, $fileName);
+            $item->cv = $file_src;
+        }
+
+        if($request->skills){
+            $skills = explode(',', trim($request->skills));
+            $item->skills = json_encode($skills);
+        }
+
+        if($item->save()){
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function updateItem($item, $request){
+        $request_keys = $request->except(['_token','cv','skills','itemSkills']);
+
+        foreach($request_keys as $key => $value){
+            $item->$key = $value;
+        }
+        
+        if ($request->hasFile('cv')) 
+        {
+            $destination = 'uploads/candidates';
+            $extension = $request->file('cv')->getClientOriginalExtension();
+            $fileName = mt_rand(11111, 99999) . time() . '.' . $extension;
+            $file_src = '/uploads/candidates/' . $fileName;
+            $request->file('cv')->move($destination, $fileName);
+            $item->cv = $file_src;
+        }
+
+        if($request->skills){
+            $skills = explode(',', trim($request->skills));
+            $final_skills = array_merge($skills, $request->itemSkills);
+            $item->skills = json_encode($final_skills);
+        }else{
+            $item->skills = json_encode($request->itemSkills);
+        }
+
+        if($item->update()){
+            return true;
+        }
+
+        return false;
     }
 }
