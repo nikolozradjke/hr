@@ -16,7 +16,7 @@ use App\Http\Controllers\Dashboard\TimelineController;
 */
 
 Route::get('/', function () {
-    return redirect('login');
+    return redirect()->route('Candidates');
 });
 
 Auth::routes();
@@ -31,7 +31,7 @@ Auth::routes();
             Route::post('/store', [IndexController::class, 'store'])->name('storeCandidates');
             Route::get('/edit/{id}', [IndexController::class, 'edit'])->name('editCandidates');
             Route::post('/update/{id}', [IndexController::class, 'update'])->name('updateCandidates');
-            
+
             Route::prefix('timeline')->group(function () {
                 Route::post('/store/{id}', [TimelineController::class, 'store'])->name('updateCandidateTimeline');
             });

@@ -13,6 +13,6 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public static function getStatuses(){
-        return Statuses::with('candidates')->get();
+        return Statuses::withCount(['candidates'])->get();
     }
 }

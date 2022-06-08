@@ -10,11 +10,16 @@ use App\Models\Candidates;
 
 class indexController extends Controller
 {
-    public function index(){
-        $statuses = $this->getStatuses();
-        $candidates = Candidates::with('getStatus')->latest()->get();
+    public function index(Request $request){
+        $keyword = $request->keyword ? $request->keyword : false;
+        $status = $request->status ? $request->status : false;
 
-        return view('dashboard.index', compact('statuses', 'candidates'));
+        $candidates = Candidates::getAll($keyword, $status);
+        $count = Candidates::count();
+
+        $statuses = $this->getStatuses();
+
+        return view('dashboard.index', compact('statuses', 'candidates', 'count'));
     }
 
     public function create(){

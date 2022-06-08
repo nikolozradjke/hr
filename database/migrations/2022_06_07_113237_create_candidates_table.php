@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('position');
             $table->string('salary_range')->nullable();
-            $table->text('skills')->nullable();
+            $table->json('skills')->nullable();
             $table->string('linkedin')->nullable();
             $table->string('cv')->nullable();
             $table->foreignId('status')->constrained('statuses');

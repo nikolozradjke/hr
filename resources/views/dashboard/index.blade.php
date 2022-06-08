@@ -2,29 +2,28 @@
 
 @section('content')
 
-    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur" data-scroll="false">
-      <div class="container-fluid py-1 px-3">
-        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <div class="input-group">
-              <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-              <input type="text" class="form-control" placeholder="Type here...">
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
-    <!-- End Navbar -->
     <div class="container-fluid py-4">
       <div class="row">
-            @forelse($statuses as $status)
-            <div class="col-2">
-              <a href="" class="nav-link text-white font-weight-bold px-0">
-                <span class="d-sm-inline d-none">{{ $status->title . ' (' . $status->candidates->count() . ')' }}</span>
-              </a>
-            </div>  
-            @empty
-            @endforelse
+            <form action="" method="GET" class="form-control">
+              <div class="input-group">
+                <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+                <input type="text" class="form-control" name="keyword" value="{{ request()->get('keyword') ? request()->get('keyword') : '' }}" placeholder="Type here...">
+                  <button type="submit" class="btn btn-primary btn-sm ms-auto">Search</button>
+              </div>
+            </form>
+            
+            <div class="col-6">
+              <form action="" method="get" class="form-control">
+                <select name="status" class="form-control">
+                  <option value="{{ false }}">All ({{ $count }})</option>
+                @forelse($statuses as $status)
+                  <option value="{{ $status->id }}" {{ request()->get('status') && request()->get('status') == $status->id ? 'selected' : '' }}>{{ $status->title . ' (' . $status->candidates_count . ')' }}</option>
+                @empty
+                @endforelse
+                </select>
+                <button type="submit" class="btn btn-primary btn-sm ms-auto">Search</button>
+              </form>
+            </div>
         <div class="col-12">
           <div class="card mb-4">
             <div class="card-header pb-0">
@@ -81,7 +80,7 @@
                         <p class="text-xs font-weight-bold mb-0">{{ $candidate->salary_range }}</p>
                       </td>
                       <td>
-                        <p class="text-xs font-weight-bold mb-0">{{ $candidate->getStatus->title }}</p>
+                        <p class="text-xs font-weight-bold mb-0">{{ $candidate->title }}</p>
                       </td>
                       <td class="align-middle">
                         <a href="{{ route('editCandidates', $candidate->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">

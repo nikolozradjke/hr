@@ -91,7 +91,7 @@ class Candidates extends Model
 
         if($request->skills){
             $skills = explode(',', trim($request->skills));
-            $final_skills = array_merge($skills, $request->itemSkills);
+            $final_skills = array_merge($skills, $request->itemSkills ? $request->itemSkills : []);
             $item->skills = json_encode($final_skills);
         }else{
             $item->skills = json_encode($request->itemSkills);
@@ -102,5 +102,26 @@ class Candidates extends Model
         }
 
         return false;
+    }
+
+    public static function getAll($keyword = false, $status = false){
+        return Candidates::join('statuses', 'candidates.status', '=', 'statuses.id')
+                        ->when($keyword, function ($query, $keyword) { 
+                                return $query->where('first_name', 'LIKE', '%'.$keyword.'%')
+                                            ->orWhere('last_name', 'LIKE', '%'.$keyword.'%')
+                                            ->orWhereJsonContains('skills', $keyword)
+                                            ->orWhere('position', 'LIKE', '%'.$keyword.'%')
+                                            ->orWhere('phone', 'LIKE', '%'.$keyword.'%')
+                                            ->orWhere('email', 'LIKE', '%'.$keyword.'%');
+                        })
+                        ->when($status, function ($query, $status){
+                            return $query->where('status', $status);
+                        })
+                        ->select(
+                            'candidates.*',
+                            'statuses.title'
+                        )
+                        ->orderBy('id', 'DESC')
+                        ->get();
     }
 }
