@@ -28,7 +28,7 @@
                       </ul>
                   </div>
               @endif
-                <form method="POST" action="{{ route('updateDashboard', $item->id) }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('updateCandidates', $item->id) }}" enctype="multipart/form-data">
                 @csrf
                 @forelse($fields as $field)
                 <div class="col-md-12">
@@ -43,7 +43,7 @@
                       <a href="{{ $item->cv }}">CV</a>
                     @endif
                     @elseif($field == 'status')
-                    <select name="{{ $field }}" class="form-control">
+                    <select name="{{ $field }}" class="form-control" disabled>
                       @forelse($statuses as $status)
                       <option value="{{ $status->id }}" {{ $status->id == $item->status ? 'selected' : '' }}>{{ $status->title }}</option>
                       @empty
@@ -75,6 +75,49 @@
                 </div>
                 </form>
               </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card card-profile">
+            <div class="card-body pt-0">
+              <div class="text-center mt-4">
+                <h3>
+                  Timeline
+                </h3>
+                @forelse($item->timelines as $timeline)
+                <div class="h6 font-weight-300">
+                  <p>
+                    {{ $timeline->status . ' - ' . $timeline->comment }}
+                  </p>
+                  <p>
+                    {{ strftime( '%e %b %Y' , strtotime($item->created_at)) }}
+                  </p>
+                  <hr>
+                </div>
+                @empty
+                @endforelse
+              </div>
+              <form action="{{ route('updateCandidateTimeline', $item->id) }}" method="POST">
+                @csrf
+                <div class="form-group">
+                  <select name="timeline_status" class="form-control">
+                    @forelse($statuses as $status)
+                    <option value="{{ $status->id }}" {{ $status->id == $item->status ? 'disabled' : '' }}>{{ $status->title }}</option>
+                    @empty
+                    @endforelse
+                  </select>
+                </div> 
+                <div class="form-group">
+                    <label for="comment" class="form-control-label">
+                      Comment
+                    </label>
+                  <textarea class="form-control" name="comment" rows="4"></textarea>
+                </div> 
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary btn-sm ms-auto">Add</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

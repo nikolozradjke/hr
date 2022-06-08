@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('candidate_id')->constrained('candidates')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->text('comment');
-            $table->string('from_to');
+            $table->text('comment')->nullable();
+            $table->string('status');
             $table->timestamps();
         });
     }

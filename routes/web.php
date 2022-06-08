@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\IndexController;
+use App\Http\Controllers\Dashboard\TimelineController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,11 +26,15 @@ Auth::routes();
             'prefix' => 'dashboard'
         ], function () {
         Route::prefix('candidates')->group(function () { 
-            Route::get('/', [IndexController::class, 'index'])->name('dashboard');
-            Route::get('/add', [IndexController::class, 'create'])->name('createDashboard');
-            Route::post('/store', [IndexController::class, 'store'])->name('storeDashboard');
-            Route::get('/edit/{id}', [IndexController::class, 'edit'])->name('editDashboard');
-            Route::post('/update/{id}', [IndexController::class, 'update'])->name('updateDashboard');
+            Route::get('/', [IndexController::class, 'index'])->name('Candidates');
+            Route::get('/add', [IndexController::class, 'create'])->name('createCandidates');
+            Route::post('/store', [IndexController::class, 'store'])->name('storeCandidates');
+            Route::get('/edit/{id}', [IndexController::class, 'edit'])->name('editCandidates');
+            Route::post('/update/{id}', [IndexController::class, 'update'])->name('updateCandidates');
+            
+            Route::prefix('timeline')->group(function () {
+                Route::post('/store/{id}', [TimelineController::class, 'store'])->name('updateCandidateTimeline');
+            });
         });
     });
 

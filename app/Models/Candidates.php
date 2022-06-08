@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Timelines;
 
 class Candidates extends Model
 {
@@ -32,10 +33,10 @@ class Candidates extends Model
     }
 
     public function timelines(){
-        return $this->hasMany(Timelnes::class, 'candidate_id', 'id');
+        return $this->hasMany(Timelines::class, 'candidate_id', 'id')->orderBy('id', 'ASC');
     }
 
-    public static function store($request){
+    public static function store($request, $status){
         $request_keys = $request->except(['_token','cv','skills']);
         $item = new Candidates;
 
@@ -59,6 +60,12 @@ class Candidates extends Model
         }
 
         if($item->save()){
+            Timelines::create([
+                'candidate_id' => $item->id,
+                'user_id' => \Auth::user()->id,
+                'comment' => 'Added to pipeline on stage ' . $status . ' by ' . \Auth::user()->name,
+                'status' => $status
+            ]);
             return true;
         }
 

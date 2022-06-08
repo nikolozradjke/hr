@@ -31,7 +31,7 @@
               <h6>Candidates</h6>
             </div>
             <div class="d-flex align-items-center">
-              <a href="{{ route('createDashboard') }}" class="btn btn-primary btn-sm ms-auto">Add</a>
+              <a href="{{ route('createCandidates') }}" class="btn btn-primary btn-sm ms-auto">Add</a>
             </div>
             @if(Session::has('success'))
             <div class="alert alert-success">
@@ -84,7 +84,7 @@
                         <p class="text-xs font-weight-bold mb-0">{{ $candidate->getStatus->title }}</p>
                       </td>
                       <td class="align-middle">
-                        <a href="{{ route('editDashboard', $candidate->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                        <a href="{{ route('editCandidates', $candidate->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                           Edit
                         </a>
                       </td>

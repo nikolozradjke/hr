@@ -28,7 +28,7 @@
                       </ul>
                   </div>
               @endif
-                <form method="POST" action="{{ route('storeDashboard') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('storeCandidates') }}" enctype="multipart/form-data">
                 @csrf
                 @forelse($fields as $field)
                 <div class="col-md-12">

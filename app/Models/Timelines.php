@@ -10,9 +10,9 @@ class Timelines extends Model
     use HasFactory;
 
     protected $fillable = [
-        'candidate_id'.
+        'candidate_id',
         'user_id',
         'comment',
-        'from_to'
+        'status'
     ];
 }
