@@ -5,10 +5,24 @@
     <div class="container-fluid py-4">
       <div class="row">
             <form action="" method="GET" class="form-control">
-              <div class="input-group">
+              <div class="input-group col-6">
                 <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
                 <input type="text" class="form-control" name="keyword" value="{{ request()->get('keyword') ? request()->get('keyword') : '' }}" placeholder="Type here...">
-                  <button type="submit" class="btn btn-primary btn-sm ms-auto">Search</button>
+              </div>
+              <div class="input-group">
+                <label for="from">
+                  From
+                  <input type="date" name="from" class="form-control">
+                </label>
+              </div>
+              <div class="input-group">
+                <label for="to">
+                  To
+                  <input type="date" name="to" class="form-control">
+                </label>
+              </div>
+              <div class="input-group">
+                <button type="submit" class="btn btn-primary btn-sm ms-auto">Search</button>
               </div>
             </form>
             
@@ -27,7 +41,7 @@
         <div class="col-12">
           <div class="card mb-4">
             <div class="card-header pb-0">
-              <h6>Candidates</h6>
+              <h6>Recruitment Pipeline</h6>
             </div>
             <div class="d-flex align-items-center">
               <a href="{{ route('createCandidates') }}" class="btn btn-primary btn-sm ms-auto">Add</a>
@@ -83,9 +97,13 @@
                         <p class="text-xs font-weight-bold mb-0">{{ $candidate->title }}</p>
                       </td>
                       <td class="align-middle">
-                        <a href="{{ route('editCandidates', $candidate->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                        <a href="{{ route('editCandidates', $candidate->id) }}" class="btn btn-primary btn-sm ms-auto" data-toggle="tooltip" data-original-title="Edit user">
                           Edit
                         </a>
+                        <form action="{{ route('removeCandidates', $candidate->id) }}" method="post">
+                        @csrf
+                          <button type="submit" class="btn btn-warning btn-sm ms-auto">Remove</button>
+                        </form>
                       </td>
                     </tr>
                     @empty

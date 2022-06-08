@@ -93,7 +93,7 @@ class Candidates extends Model
             $skills = explode(',', trim($request->skills));
             $final_skills = array_merge($skills, $request->itemSkills ? $request->itemSkills : []);
             $item->skills = json_encode($final_skills);
-        }else{
+        }elseif($request->itemSkills){
             $item->skills = json_encode($request->itemSkills);
         }
 
@@ -104,15 +104,21 @@ class Candidates extends Model
         return false;
     }
 
-    public static function getAll($keyword = false, $status = false){
+    public static function getAll($keyword = false, $status = false, $from_date = false, $to_date = false){
         return Candidates::join('statuses', 'candidates.status', '=', 'statuses.id')
+                        ->when($from_date, function ($query, $from_date){
+                            return $query->where('candidates.created_at', '>', date('Y-m-d H:i:s', strtotime($from_date)));
+                        })
+                        ->when($to_date, function ($query, $to_date){
+                            return $query->where('candidates.created_at', '<', date('Y-m-d H:i:s', strtotime($to_date)));
+                        })
                         ->when($keyword, function ($query, $keyword) { 
-                                return $query->where('first_name', 'LIKE', '%'.$keyword.'%')
-                                            ->orWhere('last_name', 'LIKE', '%'.$keyword.'%')
-                                            ->orWhereJsonContains('skills', $keyword)
-                                            ->orWhere('position', 'LIKE', '%'.$keyword.'%')
-                                            ->orWhere('phone', 'LIKE', '%'.$keyword.'%')
-                                            ->orWhere('email', 'LIKE', '%'.$keyword.'%');
+                            return $query->where('first_name', 'LIKE', '%'.$keyword.'%')
+                                        ->orWhere('last_name', 'LIKE', '%'.$keyword.'%')
+                                        ->orWhereJsonContains('skills', $keyword)
+                                        ->orWhere('position', 'LIKE', '%'.$keyword.'%')
+                                        ->orWhere('phone', 'LIKE', '%'.$keyword.'%')
+                                        ->orWhere('email', 'LIKE', '%'.$keyword.'%');
                         })
                         ->when($status, function ($query, $status){
                             return $query->where('status', $status);

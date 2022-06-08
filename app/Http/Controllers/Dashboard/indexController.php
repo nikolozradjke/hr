@@ -13,8 +13,10 @@ class indexController extends Controller
     public function index(Request $request){
         $keyword = $request->keyword ? $request->keyword : false;
         $status = $request->status ? $request->status : false;
+        $from_date = $request->from ? $request->from : false;
+        $to_date = $request->to ? $request->to : false;
 
-        $candidates = Candidates::getAll($keyword, $status);
+        $candidates = Candidates::getAll($keyword, $status, $from_date, $to_date);
         $count = Candidates::count();
 
         $statuses = $this->getStatuses();
@@ -38,10 +40,8 @@ class indexController extends Controller
             $request->session()->flash('error', 'Something went wrong!');
             return redirect()->route('createDashboard');
         }
-
-        $request->session()->flash('success', 'The operation completed successfully:');
         
-        return redirect()->route('Candidates');
+        return redirect()->route('Candidates')->with('success', 'The operation completed successfully:');
     }
     
     public function edit($id){
@@ -58,13 +58,18 @@ class indexController extends Controller
 
         if(!$update) 
         {
-            $request->session()->flash('error', 'Something went wrong!');
-            return redirect()->back();
+            return redirect()->back()->with('error', 'Something went wrong!');
         }
-
-        $request->session()->flash('success', 'The operation completed successfully:');
         
-        return redirect()->route('Candidates');
+        return redirect()->route('Candidates')->with('success', 'The operation completed successfully:');
+    }
+
+    public function remove($id){
+        $candidate = Candidates::find($id);
+        if($candidate->delete()){
+            return redirect()->back()->with('success', 'The operation completed successfully:');
+        }
+        return abort('403', 'Unauthorized action.');
     }
 
     public static function getFields($table){

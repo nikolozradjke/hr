@@ -31,6 +31,7 @@ Auth::routes();
             Route::post('/store', [IndexController::class, 'store'])->name('storeCandidates');
             Route::get('/edit/{id}', [IndexController::class, 'edit'])->name('editCandidates');
             Route::post('/update/{id}', [IndexController::class, 'update'])->name('updateCandidates');
+            Route::post('/remove/{id}', [IndexController::class, 'remove'])->name('removeCandidates');
 
             Route::prefix('timeline')->group(function () {
                 Route::post('/store/{id}', [TimelineController::class, 'store'])->name('updateCandidateTimeline');
