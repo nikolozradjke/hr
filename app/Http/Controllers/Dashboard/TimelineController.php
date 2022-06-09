@@ -12,8 +12,8 @@ use App\Models\Candidates;
 class TimelineController extends Controller
 {
     public function store($id, StatusRequest $request){
-        $candidate = Candidates::find($id);
-        $status = $this->getStatuses()->where('id', $request->timeline_status)->first()->title;
+        $candidate = Candidates::findOrFail($id);
+        $status = $this->getStatuses($request->timeline_status)->title;
         if($candidate->update(['status' => $request->timeline_status])){
             Timelines::create([
                 'candidate_id' => $id,

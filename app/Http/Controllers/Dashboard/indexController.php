@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\CandidateRequest;
-use Illuminate\Support\Facades\Schema;
 use App\Models\Candidates;
 
 class indexController extends Controller
@@ -21,18 +20,17 @@ class indexController extends Controller
 
         $statuses = $this->getStatuses();
 
-        return view('dashboard.index', compact('statuses', 'candidates', 'count'));
+        return view('dashboard.candidates.index', compact('statuses', 'candidates', 'count'));
     }
 
     public function create(){
-        $statuses = $this->getStatuses();
         $fields = $this->getFields('candidates');
 
-        return view('dashboard.add', compact('statuses', 'fields'));
+        return view('dashboard.candidates.add', compact('fields'));
     }
 
     public function store(CandidateRequest $request){
-        $status = $this->getStatuses()->where('id', 1)->first()->title;
+        $status = $this->getStatuses(1)->title;
         $insert = Candidates::store($request, $status);
 
         if(!$insert) 
@@ -49,7 +47,7 @@ class indexController extends Controller
         $fields = $this->getFields('candidates');
         $item = Candidates::with('timelines')->find($id);
 
-        return view('dashboard.edit', compact('statuses', 'fields', 'item'));
+        return view('dashboard.candidates.edit', compact('statuses', 'fields', 'item'));
     }
 
     public function update($id, CandidateRequest $request){
@@ -70,16 +68,5 @@ class indexController extends Controller
             return redirect()->back()->with('success', 'The operation completed successfully:');
         }
         return abort('403', 'Unauthorized action.');
-    }
-
-    public static function getFields($table){
-        $main_table_columns = Schema::getColumnListing($table);
-        $main_no_generate_columns = [
-            'id',
-            'created_at',
-            'updated_at'
-        ];
-        
-        return  array_diff($main_table_columns,$main_no_generate_columns);
     }
 }

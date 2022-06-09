@@ -35,13 +35,23 @@ class CandidateController extends Controller
     }
 
     public function store(CandidateRequest $request){
-        $status = $this->getStatuses()->where('id', 1)->first()->title;
+        $status = $this->getStatuses(1)->title;
         $insert = Candidates::store($request, $status);
-        return true;
+        
+        if(!$insert){
+            return response()->json([
+                'status' => 0,
+                'desc' => 'Something went wrong'
+            ]);
+        }
+        return response()->json([
+            'status' => 1,
+            'desc' => 'Candidate created successfully'
+        ]);
     }
 
-    public function show($id){
-        $candidate = Candidates::with('timelines')->find($id);
+    public function show(Request $request){
+        $candidate = Candidates::with('timelines')->find($request->candidate_id);
 
         if($candidate){
             return response()->json([
@@ -57,8 +67,8 @@ class CandidateController extends Controller
         
     }
 
-    public function showCandidateTimeline($id){
-        $timeline = Timelines::where('candidate_id', $id)->orderBy('id', 'ASC')->get();
+    public function showCandidateTimeline(Request $request){
+        $timeline = Timelines::where('candidate_id', $request->candidate_id)->orderBy('id', 'ASC')->get();
         if(count($timeline)){
             $details = [];
             foreach($timeline as $key => $item){
@@ -82,9 +92,9 @@ class CandidateController extends Controller
     }
 
     public function changeStatus(StatusRequest $request){
-        $candidate = Candidates::find($request->id);
-        $status = $this->getStatuses()->where('id', $request->timeline_status)->first()->title;
-        if($candidate->update(['status' => $request->timeline_status])){
+        $candidate = Candidates::find($request->candidate_id);
+        $status = $this->getStatuses($request->timeline_status)->title;
+        if($candidate && $candidate->update(['status' => $request->timeline_status])){
             Timelines::create([
                 'candidate_id' => $candidate->id,
                 'user_id' => \Auth::user()->id,

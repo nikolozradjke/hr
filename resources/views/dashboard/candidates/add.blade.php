@@ -40,11 +40,8 @@
                     @if($field == 'cv')
                     <input class="form-control" type="file" name="{{ $field }}" value="{{ old($field) }}">
                     @elseif($field == 'status')
-                    <select name="{{ $field }}" class="form-control">
-                      @forelse($statuses as $status)
-                      <option value="{{ $status->id }}">{{ $status->title }}</option>
-                      @empty
-                      @endforelse
+                    <select name="{{ $field }}" class="form-control" disabled>
+                      <option value="1">Initial</option>
                     </select>
                     @else
                     <input class="form-control" type="text" name="{{ $field }}" value="{{ old($field) }}">

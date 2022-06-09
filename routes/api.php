@@ -23,8 +23,8 @@ Route::group([
     ], function () {
         Route::prefix('candidates')->group(function () { 
             Route::get('/', [CandidateController::class, 'index']);
-            Route::get('/show/{id}', [CandidateController::class, 'show']);
-            Route::get('/show-timeline/{id}', [CandidateController::class, 'showCandidateTimeline']);
+            Route::get('/show', [CandidateController::class, 'show']);
+            Route::get('/show-timeline', [CandidateController::class, 'showCandidateTimeline']);
             Route::post('/store', [CandidateController::class, 'store']);
             Route::post('/change-status', [CandidateController::class, 'changeStatus']);
         });

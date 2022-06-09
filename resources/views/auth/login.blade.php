@@ -57,6 +57,9 @@
                                     {{ __('Login') }}
                                 </button>
                             </div>
+                            <div class="form-group">
+                                <a href="{{ route('register') }}" class="btn btn-warning">Register</a>
+                            </div>
                         </div>
                     </form>
                 </div>
