@@ -34,7 +34,7 @@ Auth::routes();
             Route::post('/remove/{id}', [IndexController::class, 'remove'])->name('removeCandidates');
 
             Route::prefix('timeline')->group(function () {
-                Route::post('/store/{id}', [TimelineController::class, 'store'])->name('updateCandidateTimeline');
+                Route::post('/store/{id}', [TimelineController::class, 'store'])->name('storeCandidateTimeline');
             });
         });
     });

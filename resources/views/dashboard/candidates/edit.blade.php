@@ -98,7 +98,7 @@
                 @empty
                 @endforelse
               </div>
-              <form action="{{ route('updateCandidateTimeline', $item->id) }}" method="POST">
+              <form action="{{ route('storeCandidateTimeline', $item->id) }}" method="POST">
                 @csrf
                 <div class="form-group">
                   <select name="timeline_status" class="form-control">
