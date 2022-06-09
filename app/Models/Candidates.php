@@ -37,9 +37,9 @@ class Candidates extends Model
     }
 
     public static function store($request, $status){
-        $request_keys = $request->except(['_token','cv','skills']);
+        $request_keys = $request->except(['_token','cv','skills','status']);
         $item = new Candidates;
-
+        $item->status = 1;
         foreach($request_keys as $key => $value){
             $item->$key = $value;
         }
@@ -125,7 +125,7 @@ class Candidates extends Model
                         })
                         ->select(
                             'candidates.*',
-                            'statuses.title'
+                            'statuses.title as status_title'
                         )
                         ->orderBy('id', 'DESC')
                         ->get();

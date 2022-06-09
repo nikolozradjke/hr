@@ -15,4 +15,12 @@ class Timelines extends Model
         'comment',
         'status'
     ];
+
+    public function candidate(){
+        return $this->belongsTo(Candidates::class, 'candidate_id', 'id');
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

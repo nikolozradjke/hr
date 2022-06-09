@@ -94,7 +94,7 @@
                         <p class="text-xs font-weight-bold mb-0">{{ $candidate->salary_range }}</p>
                       </td>
                       <td>
-                        <p class="text-xs font-weight-bold mb-0">{{ $candidate->title }}</p>
+                        <p class="text-xs font-weight-bold mb-0">{{ $candidate->status_title }}</p>
                       </td>
                       <td class="align-middle">
                         <a href="{{ route('editCandidates', $candidate->id) }}" class="btn btn-primary btn-sm ms-auto" data-toggle="tooltip" data-original-title="Edit user">

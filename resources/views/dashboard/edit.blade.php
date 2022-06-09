@@ -103,7 +103,7 @@
                 <div class="form-group">
                   <select name="timeline_status" class="form-control">
                     @forelse($statuses as $status)
-                    <option value="{{ $status->id }}" {{ $status->id == $item->status ? 'disabled' : '' }}>{{ $status->title }}</option>
+                    <option value="{{ $status->id }}" {{ $status->id == $item->status ? 'selected disabled' : '' }}>{{ $status->title }}</option>
                     @empty
                     @endforelse
                   </select>

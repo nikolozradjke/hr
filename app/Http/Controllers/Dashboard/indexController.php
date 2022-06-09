@@ -32,7 +32,7 @@ class indexController extends Controller
     }
 
     public function store(CandidateRequest $request){
-        $status = $this->getStatuses()->where('id', $request->status)->first()->title;
+        $status = $this->getStatuses()->where('id', 1)->first()->title;
         $insert = Candidates::store($request, $status);
 
         if(!$insert) 

@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\StatusRequest;
 use App\Models\Timelines;
 use App\Models\Candidates;
 
 
 class TimelineController extends Controller
 {
-    public function store($id, Request $request){
+    public function store($id, StatusRequest $request){
         $candidate = Candidates::find($id);
         $status = $this->getStatuses()->where('id', $request->timeline_status)->first()->title;
         if($candidate->update(['status' => $request->timeline_status])){
